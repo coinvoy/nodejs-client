@@ -5,24 +5,35 @@ var Coinvoy = require('./coinvoy.js').Coinvoy;
 
 var coinvoy = new Coinvoy();
 
-var amount = 0.85;
-var address = "your cryptocurrency address";
-var currency = "BTC";
+var amount        = 0.012;
+var address       = "receiving address";
+var returnAddress = "return address";
+var currency      = "BTC";
+var key           = "key returned from escrow payment";
 
-createInvoice();
-// getDonation();
-// getButton();
 
-var createInvoice = function () {
-	coinvoy.invoice(amount, address, currency, function (invoice) {
-		console.log(invoice);
+var createPayment = function () {
+	coinvoy.payment(amount, currency, address, function (payment) {
+		console.log(payment);
 
-		if (!invoice.success) return;
+		if (!payment.success) return;
 
-		coinvoy.getInvoice(invoice.id, function (response) {
+		coinvoy.status(payment.id, function (response) {
 			console.log(response);
 		});
 	});
+};
+
+var createEscrow = function () {
+	coinvoy.payment(amount, currency, address, function (payment) {
+		console.log(payment);
+
+		if (!payment.success) return;
+
+		coinvoy.invoice(payment.id, function (response) {
+			console.log(response);
+		});
+	}, { escrow : true, returnAddress : returnAddress } );
 };
 
 var getDonation = function () {
@@ -34,15 +45,28 @@ var getDonation = function () {
 
 
 var getButton = function () {
-	coinvoy.button(amount, address, currency, function (button) {
+	coinvoy.button(amount, currency, address, function (button) {
 		console.log(button);
-
-		if (!button.success) return;
-
-		coinvoy.invoiceFromHash(button.hash, 'BTC', function (result) {
-			
-			console.log(result);
-		});
-
 	});
 };
+
+var freeEscrow = function () {
+    coinvoy.freeEscrow(key, function (result) {
+        console.log(result);
+    });
+};
+
+
+var cancelEscrow = function () {
+    coinvoy.cancelEscrow(key, function (result) {
+        console.log(result);
+    });
+};
+
+createPayment();
+// createEscrow();
+// getDonation();
+// getButton();
+// freeEscrow();
+// cancelEscrow();
+
