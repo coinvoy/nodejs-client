@@ -4,7 +4,6 @@
 
 var crypto      = require('crypto');
 var https       = require('https');
-var querystring = require('querystring');
 
 
 var Coinvoy = function () {
@@ -23,7 +22,7 @@ var Coinvoy = function () {
 //                                           callback,
 //                                           company,
 //                                           motto,
-//                                           logoURL,
+//                                           companyLogo,
 //                                           addressLine1,
 //                                           addressLine2,
 //                                           email,
@@ -66,7 +65,7 @@ Coinvoy.prototype.payment = function (amount, currency, address, callback, optio
 //                                         callback,
 //                                         company,
 //                                         motto,
-//                                         logoURL,
+//                                         companyLogo,
 //                                         addressLine1,
 //                                         addressLine2,
 //                                         email,
@@ -108,7 +107,7 @@ Coinvoy.prototype.button = function (amount, currency, address, callback, option
 //                                           callback,
 //                                           company,
 //                                           motto,
-//                                           logoURL,
+//                                           companyLogo,
 //                                           addressLine1,
 //                                           addressLine2,
 //                                           email,
@@ -230,7 +229,7 @@ Coinvoy.prototype._apiRequest = function (path, params, callback) {
       }
     };
 
-    var req = http.request(options, function (response) {
+    var req = https.request(options, function (response) {
         var content = '';
 
         response.on('data', function (chunk) {
